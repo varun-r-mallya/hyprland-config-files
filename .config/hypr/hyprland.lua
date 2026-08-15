@@ -174,6 +174,16 @@ hl.exec_cmd("nm-applet")
 hl.exec_cmd("hypridle")
 hl.exec_cmd("/usr/lib/hyprpolkitagent/hyprpolkitagent")
 hl.exec_cmd("kwalletd6")
+
+-- hyprexpo plugin config (set after plugin loads) — hyprexpo is built and
+-- hyprpm-permitted (see HYPRLAND_README.md) but disabled by default;
+-- uncomment these to actually turn it on.
+-- hl.exec_cmd("hyprctl keyword plugin:hyprexpo:columns 3")
+-- hl.exec_cmd("hyprctl keyword plugin:hyprexpo:gap_size 5")
+-- hl.exec_cmd("hyprctl keyword plugin:hyprexpo:bg_col 'rgb(111111)'")
+-- hl.exec_cmd("hyprctl keyword plugin:hyprexpo:workspace_method 'center current'")
+-- hl.exec_cmd("hyprctl keyword plugin:hyprexpo:enable_gesture false")
+-- hl.exec_cmd("hyprctl keyword plugin:hyprexpo:gesture_distance 300")
 end)
 
 -- ── Cursor ────────────────────────────────────────────────────────────────
