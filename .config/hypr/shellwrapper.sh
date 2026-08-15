@@ -28,7 +28,7 @@ dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY WA
 ( sleep 1; /usr/lib/xdg-desktop-portal & ) &
 # Polkit agent is launched from hyprland.lua's own autostart block.
 
-WALLPAPER="$HOME/Pictures/Wallpapers/serene-anime-grassland-under-blue-skies-backiee-4K.jpg"
+WALLPAPER="/home/mallya/Pictures/Wallpapers/anime-moon-landscape.jpg"
 
 # WallpaperState.qml only needs this JSON to exist with SOME valid content
 # to paint something on first frame — it doesn't need wal's color
@@ -60,5 +60,3 @@ qs -d &
 ) &
 
 wl-paste --watch cliphist --max-items 10 store &
-
-bash ~/.config/hypr/hdmi-refresh.sh &
