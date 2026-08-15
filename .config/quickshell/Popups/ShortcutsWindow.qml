@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Io
+import Quickshell.Hyprland
 import "../Services"
 import "../Theme"
 
@@ -14,7 +15,9 @@ PanelWindow {
     property real openProgress: 0
     visible: menuOpen || openProgress > 0
 
-    screen: Quickshell.screens[0]
+    // Anchor to the focused monitor, not a hardcoded screens[0] — see
+    // CommandsPopup.qml for why.
+    screen: Quickshell.screens.find(s => s.name === (Hyprland.focusedMonitor ? Hyprland.focusedMonitor.name : "")) || Quickshell.screens[0]
 
     onMenuOpenChanged: {
         if (menuOpen) {

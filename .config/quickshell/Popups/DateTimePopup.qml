@@ -130,7 +130,7 @@ PanelWindow {
         opacity: popup.openProgress
         property real blurAmount: Math.sin(Math.PI * popup.openProgress) * Animations.slideBlurVerticalLength *1.5
 
-        layer.enabled: true
+        layer.enabled: false
         layer.effect: DirectionalBlur {
             angle: Animations.slideBlurVerticalAngle
             length: stackCol.blurAmount
@@ -173,7 +173,7 @@ PanelWindow {
                     // which is the root cause of the "vertical streak" Qt bug.
                     Item {
                         anchors.fill: parent
-                        layer.enabled: true
+                        layer.enabled: false
                         layer.effect: DirectionalBlur {
                             angle: 0 // 0 degrees = strictly horizontal left-to-right
                             length: pagerBox.blurAmount
@@ -243,7 +243,6 @@ PanelWindow {
                     slideAnim.dir = direction
 
                     slideAnim.start()
-                    pagerShakeAnim.start()
 
                     popup.currentIndex = newIndex
                 }

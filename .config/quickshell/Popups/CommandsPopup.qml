@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
+import Quickshell.Hyprland
 import "../Services"
 import "../Widgets"
 import "../Theme"
@@ -16,6 +17,12 @@ PanelWindow {
     property real openProgress: 0
     visible: shown || hiding
     color: "transparent"
+
+    // Anchor to whichever monitor is actually focused — a hardcoded
+    // screens[0] silently lands on the wrong monitor whenever monitor
+    // enumeration order changes (e.g. after repositioning an external
+    // display), leaving this popup invisible on an unfocused screen.
+    screen: Quickshell.screens.find(s => s.name === (Hyprland.focusedMonitor ? Hyprland.focusedMonitor.name : "")) || Quickshell.screens[0]
 
     WlrLayershell.layer: WlrLayer.Overlay
     WlrLayershell.namespace: "quickshell:commands"
@@ -45,14 +52,14 @@ PanelWindow {
         id: openAnim
         target: popup; property: "openProgress"
         to: 1
-        duration: Animations.slideBlurDuration(50)
+        duration: Animations.scaleDuration(50)
         easing.type: Animations.slideBlurEasingOut
     }
     NumberAnimation {
         id: closeAnim
         target: popup; property: "openProgress"
         to: 0
-        duration: Animations.slideBlurDuration(50)
+        duration: Animations.scaleDuration(50)
         easing.type: Animations.slideBlurEasingIn
     }
 

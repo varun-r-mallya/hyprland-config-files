@@ -20,7 +20,7 @@ ColumnLayout {
     opacity: entranceProgress
     property real entranceBlur: Math.sin(Math.PI * entranceProgress) * Animations.slideBlurHorizontalLength
 
-    layer.enabled: true
+    layer.enabled: false
     layer.effect: DirectionalBlur {
         angle: Animations.slideBlurHorizontalAngle
         length: root.entranceBlur + root.refreshBlur

@@ -23,7 +23,7 @@ Item {
         opacity: 1 - offsetProgress
         property real blurAmount: Math.sin(Math.PI * offsetProgress) * Animations.slideBlurHorizontalLength
 
-        layer.enabled: true
+        layer.enabled: false
         layer.effect: DirectionalBlur {
             angle: Animations.slideBlurHorizontalAngle
             length: monthPage.blurAmount
@@ -52,7 +52,7 @@ Item {
         opacity: 1 - offsetProgress
         property real blurAmount: Math.sin(Math.PI * offsetProgress) * Animations.slideBlurHorizontalLength
 
-        layer.enabled: true
+        layer.enabled: false
         layer.effect: DirectionalBlur {
             angle: Animations.slideBlurHorizontalAngle
             length: detailPage.blurAmount

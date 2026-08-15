@@ -76,7 +76,7 @@ ColumnLayout {
         property real entranceProgress: 1
         property real blurAmount: Math.sin(Math.PI * holidayBlock.entranceProgress) * Animations.slideBlurHorizontalLength
 
-        layer.enabled: true
+        layer.enabled: false
         layer.effect: DirectionalBlur {
             angle: Animations.slideBlurHorizontalAngle
             length: holidayBlock.blurAmount
@@ -157,7 +157,7 @@ ColumnLayout {
         property real entranceProgress: 1
         property real blurAmount: Math.sin(Math.PI * eventBlock.entranceProgress) * Animations.slideBlurHorizontalLength
 
-        layer.enabled: true
+        layer.enabled: false
         layer.effect: DirectionalBlur {
             angle: Animations.slideBlurHorizontalAngle
             length: eventBlock.blurAmount
