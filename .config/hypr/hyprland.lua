@@ -47,19 +47,14 @@ local mainMod     = "SUPER"
 ---- LAYER RULES ----
 --------------------
 
-hl.layer_rule({ match = { namespace = "eww"              }, blur = true })
 hl.layer_rule({ match = { namespace = "quickshell:.*" }, blur = true })
 hl.layer_rule({ match = { namespace = "quickshell:.*" }, ignore_alpha = 0.05 })
 hl.layer_rule({ match = { namespace = "volume-popup" },  ignore_alpha = 0.05 })
-hl.layer_rule({ match = { namespace = "bar" },  ignore_alpha = 0.05 })
 hl.layer_rule({ match = { namespace = "gtk-layer-shell"  }, blur = true })
 hl.layer_rule({ match = { namespace = "rofi"             }, blur = true })
 hl.layer_rule({ match = { namespace = "rofi" },  ignore_alpha = 0.05 })
 hl.layer_rule({ match = { namespace = "notifications"    }, blur = true })
 hl.layer_rule({ match = { namespace = "volume-popup"     }, blur = true })
-hl.layer_rule({ match = { namespace = "brightness-popup" }, blur = true })
-hl.layer_rule({ match = { namespace = "bt-popup"         }, blur = true })
-hl.layer_rule({ match = { namespace = "wifi-popup"       }, blur = true })
 hl.layer_rule({ match = { namespace = "bar-window" }, blur = true, ignore_alpha = 0.05, animation = "false" })
 hl.layer_rule({
     match = { namespace = "bar-trigger" },
@@ -139,22 +134,11 @@ hl.layer_rule({
     ignore_alpha = 0.1,
     animation = "false",
 })
-hl.layer_rule({ match = { namespace = "top-bar-window"   }, blur = true, ignore_alpha = 0.05 })
-hl.layer_rule({ match = { namespace = "battery-popup"    }, blur = true, ignore_alpha = 0.05 })
 hl.layer_rule({ match = { namespace = "shortcuts-window" }, blur = true, ignore_alpha = 0.1  })
-hl.layer_rule({ match = { namespace = "commands-window"  }, blur = true, ignore_alpha = 0.1  })
-hl.layer_rule({ match = { namespace = "music-popup"      }, blur = true, ignore_alpha = 0.1,
-              animation = "slide bottom" })
 hl.layer_rule({ match = { namespace = "datetime-popup"   }, blur = true, ignore_alpha = 0.1,
               animation = "slide bottom" })
 hl.layer_rule({
     match = { namespace = "datetime-popup" },
-    blur = true,
-    ignore_alpha = 0.1,
-    animation = "false",
-})
-hl.layer_rule({
-    match = { namespace = "quickshell:popup:applications" },
     blur = true,
     ignore_alpha = 0.1,
     animation = "false",
@@ -178,9 +162,7 @@ hl.layer_rule({ match = { namespace = "hyprlock" }, animation = "slide top" })
 hl.on("hyprland.start", function()
 hl.exec_cmd("~/.config/hypr/shellwrapper.sh")
 hl.exec_cmd("~/.config/hypr/volume-osd --daemon &")
--- hl.exec_cmd("dunst")
 hl.exec_cmd("~/.config/hypr/autoplay.sh")
--- hl.exec_cmd("pkill cava; rm -f /tmp/cava.fifo; mkfifo /tmp/cava.fifo; cava -p ~/.config/cava/config")
 hl.exec_cmd("kdeconnectd")
 hl.exec_cmd("kded")
 hl.exec_cmd("kglobalaccel6")
@@ -192,18 +174,6 @@ hl.exec_cmd("nm-applet")
 hl.exec_cmd("hypridle")
 hl.exec_cmd("/usr/lib/hyprpolkitagent/hyprpolkitagent")
 hl.exec_cmd("kwalletd6")
-
--- hl.exec_cmd("playerctld daemon")
--- hl.exec_cmd("bash ~/.config/eww/popup-monitor.sh")
--- hl.exec_cmd("bash ~/.config/eww/player-daemon.sh")
--- hl.exec_cmd("bash ~/.config/eww/player-start.sh")
--- hyprexpo plugin config (set after plugin loads)
--- hl.exec_cmd("hyprctl keyword plugin:hyprexpo:columns 3")
--- hl.exec_cmd("hyprctl keyword plugin:hyprexpo:gap_size 5")
--- hl.exec_cmd("hyprctl keyword plugin:hyprexpo:bg_col 'rgb(111111)'")
--- hl.exec_cmd("hyprctl keyword plugin:hyprexpo:workspace_method 'center current'")
--- hl.exec_cmd("hyprctl keyword plugin:hyprexpo:enable_gesture false")
--- hl.exec_cmd("hyprctl keyword plugin:hyprexpo:gesture_distance 300")
 end)
 
 -- ── Cursor ────────────────────────────────────────────────────────────────
@@ -481,9 +451,6 @@ hl.gesture({ fingers = 3, direction = "down",       modifiers = "ALT", action = 
 ---- KEYBINDINGS ----
 --------------------
 
--- Bar toggle
-hl.bind(mainMod .. " + SHIFT + T", hl.dsp.exec_cmd("~/.config/hypr/toggle-bar.sh"))
-
 -- Touchpad toggle
 hl.bind("ALT + M", hl.dsp.exec_cmd("bash ~/.config/hypr/toggle_touchpad.sh"))
 -- Toggle the workspace overview: Alt+Tab -> Quickshell global shortcut
@@ -496,22 +463,10 @@ hl.bind(mainMod .. " + SHIFT + escape", hl.dsp.exec_cmd("~/.config/hypr/schedule
 -- Direct exit/shutdown (carried over from previous live config)
 hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
 
--- Monitor layout switches
--- hl.bind("ALT + SHIFT + S", hl.dsp.exec_cmd(
-    --     'hyprctl keyword monitor "eDP-1,1920x1080@60.05,0x0,1.5" ; '..
-    --     'hyprctl keyword monitor "HDMI-A-1,disable" ; '..
-    --     'killall -9 eww 2>/dev/null ; eww daemon ; '..
-    --     'eww open bar-window && eww open top-bar-window'
-    -- ))
-
-    hl.bind("ALT + S", hl.dsp.exec_cmd("~/.config/hypr/hdmi.sh"))
+hl.bind("ALT + S", hl.dsp.exec_cmd("~/.config/hypr/hdmi.sh"))
     hl.bind("ALT" .. " + SHIFT + S", hl.dsp.exec_cmd("~/.config/hypr/hdmi-refresh.sh"))
 
-    -- Reload eww bar
-    -- hl.bind("ALT + R", hl.dsp.exec_cmd(
-        --     'killall -9 eww 2>/dev/null ; bash ~/.config/eww/preload.sh & eww daemon && sleep 0.5; eww open bar-window'
-        -- ))
-        hl.bind("ALT + R", hl.dsp.exec_cmd(
+    hl.bind("ALT + R", hl.dsp.exec_cmd(
             'bash ~/.config/quickshell/scripts/rofi-animation-scale.sh'
         ))
 
@@ -528,12 +483,9 @@ hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2
             'playerctl --ignore-player=kdeconnect previous'
         ), { locked = true })
 
-        -- hl.bind(mainMod .. " + A", hl.dsp.exec_cmd("eww open commands-window --toggle"))
-        -- hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("eww open shortcuts-window --toggle"))
         hl.bind(mainMod .. " + A", hl.dsp.exec_cmd("qs ipc call commands toggle"))
         hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("qs ipc call shortcuts toggle"))
         -- Lock / suspend
-        -- hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("bash ~/.config/gtklock/lock.sh"))
         hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("qs ipc call lock lock"))
         -- Apps
         hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
@@ -552,10 +504,7 @@ hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2
         hl.bind(mainMod .. " + SHIFT + N", hl.dsp.workspace.toggle_special("minimized"))
 
         -- Screenshot
-        -- hl.bind(mainMod .. " + S", hl.dsp.exec_cmd(
-            --     'sleep 0.2 && grim -g "$(slurp)" ~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png && notify-send "Screenshot saved."'
-            -- ))
-            hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("qs ipc call screenshot capture"))
+        hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("qs ipc call screenshot capture"))
 
             -- KDE Spectacle style screenshot binds (carried over from previous live config)
             hl.bind("Print", hl.dsp.exec_cmd("hyprshot -m region"))
