@@ -329,175 +329,9 @@ Scope {
                 opacity: Theme.background.hslLightness < 0.5 ? 0.40 : 0.40
             }
 
-            RowLayout {
-                id: powerRow
-                anchors.top: parent.top
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.topMargin: 24
-                spacing: 10
-
-                readonly property string iconDir: "file://" + Quickshell.env("HOME") + "/.config/icons/"
-
-                function requestAction(action, name) {
-                    console.warn("[power] requestAction() called, currentText length:", root.currentText.length)
-                    root.authenticate(action, name)
-                }
-
-                GlassButton {
-                    id: suspendBtn
-                    icon: powerRow.iconDir + "suspend.svg"
-                    elevated: true
-                    implicitWidth: 48
-                    implicitHeight: 48
-                    property real shakeX: 0
-                    transform: Translate { x: suspendBtn.shakeX }
-                    layer.enabled: true
-                    layer.effect: DirectionalBlur {
-                        angle: 0
-                        length: Math.min(10, Math.abs(suspendBtn.shakeX) * 3)
-                        samples: 16
-                    }
-                    SequentialAnimation {
-                        id: suspendShake
-                        running: false
-                        PropertyAction { target: suspendBtn; property: "shakeX"; value: 5 }
-                        PauseAnimation { duration: 30 }
-                        PropertyAction { target: suspendBtn; property: "shakeX"; value: -5 }
-                        PauseAnimation { duration: 30 }
-                        PropertyAction { target: suspendBtn; property: "shakeX"; value: 3 }
-                        PauseAnimation { duration: 25 }
-                        PropertyAction { target: suspendBtn; property: "shakeX"; value: -3 }
-                        PauseAnimation { duration: 25 }
-                        PropertyAction { target: suspendBtn; property: "shakeX"; value: 0 }
-                    }
-                    onClicked: {
-                        console.warn("[power] suspend clicked")
-                        suspendShake.stop()
-                        suspendShake.start()
-                        suspendProc.running = true
-                    }
-                }
-                GlassButton {
-                    id: restartBtn
-                    icon: powerRow.iconDir + "restart.svg"
-                    elevated: true
-                    implicitWidth: 48
-                    implicitHeight: 48
-                    property real shakeX: 0
-                    transform: Translate { x: restartBtn.shakeX }
-                    layer.enabled: true
-                    layer.effect: DirectionalBlur {
-                        angle: 0
-                        length: Math.min(10, Math.abs(restartBtn.shakeX) * 3)
-                        samples: 16
-                    }
-                    SequentialAnimation {
-                        id: restartShake
-                        running: false
-                        PropertyAction { target: restartBtn; property: "shakeX"; value: 5 }
-                        PauseAnimation { duration: 30 }
-                        PropertyAction { target: restartBtn; property: "shakeX"; value: -5 }
-                        PauseAnimation { duration: 30 }
-                        PropertyAction { target: restartBtn; property: "shakeX"; value: 3 }
-                        PauseAnimation { duration: 25 }
-                        PropertyAction { target: restartBtn; property: "shakeX"; value: -3 }
-                        PauseAnimation { duration: 25 }
-                        PropertyAction { target: restartBtn; property: "shakeX"; value: 0 }
-                    }
-                    onClicked: {
-                        console.warn("[power] restart clicked")
-                        restartShake.stop()
-                        restartShake.start()
-                        powerRow.requestAction(() => rebootProc.running = true, "restart")
-                    }
-                }
-                GlassButton {
-                    id: poweroffBtn
-                    icon: powerRow.iconDir + "power-off.svg"
-                    elevated: true
-                    implicitWidth: 48
-                    implicitHeight: 48
-                    property real shakeX: 0
-                    transform: Translate { x: poweroffBtn.shakeX }
-                    layer.enabled: true
-                    layer.effect: DirectionalBlur {
-                        angle: 0
-                        length: Math.min(10, Math.abs(poweroffBtn.shakeX) * 3)
-                        samples: 16
-                    }
-                    SequentialAnimation {
-                        id: poweroffShake
-                        running: false
-                        PropertyAction { target: poweroffBtn; property: "shakeX"; value: 5 }
-                        PauseAnimation { duration: 30 }
-                        PropertyAction { target: poweroffBtn; property: "shakeX"; value: -5 }
-                        PauseAnimation { duration: 30 }
-                        PropertyAction { target: poweroffBtn; property: "shakeX"; value: 3 }
-                        PauseAnimation { duration: 25 }
-                        PropertyAction { target: poweroffBtn; property: "shakeX"; value: -3 }
-                        PauseAnimation { duration: 25 }
-                        PropertyAction { target: poweroffBtn; property: "shakeX"; value: 0 }
-                    }
-                    onClicked: {
-                        console.warn("[power] poweroff clicked")
-                        poweroffShake.stop()
-                        poweroffShake.start()
-                        powerRow.requestAction(() => poweroffProc.running = true, "shutdown")
-                    }
-                }
-
-                Process {
-                    id: suspendProc
-                    command: ["systemctl", "suspend"]
-                    stderr: SplitParser {
-                        onRead: (line) => console.warn("[power] suspend stderr:", line)
-                    }
-                    onExited: (exitCode, exitStatus) => console.warn("[power] suspend exited, code:", exitCode, "status:", exitStatus)
-                }
-                Process {
-                    id: rebootProc
-                    command: ["systemctl", "reboot"]
-                    stderr: SplitParser {
-                        onRead: (line) => console.warn("[power] reboot stderr:", line)
-                    }
-                    onExited: (exitCode, exitStatus) => console.warn("[power] reboot exited, code:", exitCode, "status:", exitStatus)
-                }
-                Process {
-                    id: poweroffProc
-                    command: ["systemctl", "poweroff"]
-                    stderr: SplitParser {
-                        onRead: (line) => console.warn("[power] poweroff stderr:", line)
-                    }
-                    onExited: (exitCode, exitStatus) => console.warn("[power] poweroff exited, code:", exitCode, "status:", exitStatus)
-                }
-            }
-
-            LockSettingsButton {
-                id: settingsBtn
-                anchors.top: parent.top
-                anchors.right: parent.right
-                anchors.topMargin: 24
-                anchors.rightMargin: 24
-                active: surface.settingsOpen
-                onToggled: surface.settingsOpen = !surface.settingsOpen
-            }
-
-            LockSettingsPanel {
-                anchors.top: parent.top
-                anchors.right: parent.right
-                anchors.topMargin: 76
-                anchors.rightMargin: 24
-                transformOrigin: Item.TopRight
-                shown: surface.settingsOpen
-            }
-
             LockClock {
                 id: clock
                 anchors.centerIn: parent
-                anchors.horizontalCenterOffset: surface.settingsOpen ? -140 : 0
-                Behavior on anchors.horizontalCenterOffset {
-                    NumberAnimation { duration: 220; easing.type: Easing.OutCubic }
-                }
             }
 
             Text {
@@ -505,32 +339,11 @@ Scope {
                 anchors.horizontalCenter: clock.horizontalCenter
                 anchors.top: pwRow.bottom
                 anchors.topMargin: 8
-                text: root.failed ? "Wrong password"
-                : root.confirmAction !== null ? "Click again to confirm " + root.confirmActionName + "."
-                : (root.pendingAction !== null ? "Password required to perform action." : "")
+                text: root.failed ? "Wrong password" : ""
                 visible: text.length > 0
-                color: root.failed ? "#ff6b6b" : "white"
+                color: "#ff6b6b"
                 font.family: Theme.fontFamily
                 font.pixelSize: 13
-            }
-
-            Text {
-                id: cancelActionLabel
-                anchors.horizontalCenter: clock.horizontalCenter
-                anchors.top: statusLabel.visible ? statusLabel.bottom : pwRow.bottom
-                anchors.topMargin: 6
-                visible: root.pendingAction !== null || root.confirmAction !== null
-                text: "Cancel"
-                font.family: Theme.fontFamily
-                font.pixelSize: 12
-                font.underline: true
-                color: "white"
-
-                MouseArea {
-                    anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: root.cancelPendingAction()
-                }
             }
 
             RowLayout {
@@ -538,10 +351,8 @@ Scope {
                 anchors.horizontalCenter: clock.horizontalCenter
                 anchors.top: clock.bottom
                 anchors.topMargin: 24
-                spacing: 6
 
                 function submit() {
-                    console.warn("[lock] submit() called, currentText length:", root.currentText.length)
                     root.tryUnlock()
                 }
 
@@ -550,45 +361,41 @@ Scope {
                     pwField.text = ""
                 }
 
-                TextField {
-                    id: pwField
-                    Layout.preferredWidth: 180
-                    implicitHeight: 20
-                    echoMode: TextInput.Password
-                    passwordCharacter: "\u2022"
-                    horizontalAlignment: TextInput.AlignHCenter
-                    placeholderText: "Password"
-
-                    font.family: Theme.fontFamily
-                    font.pixelSize: 16
-                    color: Theme.foreground
-                    placeholderTextColor: "white"
+                Rectangle {
+                    id: pwPill
+                    implicitWidth: 260
+                    implicitHeight: 46
+                    radius: height / 2
+                    color: Qt.rgba(Theme.popupBg.r, Theme.popupBg.g, Theme.popupBg.b, 0.5)
+                    border.width: 2
+                    border.color: pwField.activeFocus ? Theme.accentActive : Theme.borderMuted
+                    Behavior on border.color { ColorAnimation { duration: 150 } }
 
                     property real shakeX: 0
-                    transform: Translate { x: pwField.shakeX }
+                    transform: Translate { x: pwPill.shakeX }
                     layer.enabled: true
                     layer.effect: DirectionalBlur {
                         angle: 0
-                        length: Math.min(28, Math.abs(pwField.shakeX) * 5)
+                        length: Math.min(28, Math.abs(pwPill.shakeX) * 5)
                         samples: 24
                     }
 
                     SequentialAnimation {
                         id: pwShake
                         running: false
-                        PropertyAction { target: pwField; property: "shakeX"; value: 6 }
+                        PropertyAction { target: pwPill; property: "shakeX"; value: 6 }
                         PauseAnimation { duration: 35 }
-                        PropertyAction { target: pwField; property: "shakeX"; value: -18 }
+                        PropertyAction { target: pwPill; property: "shakeX"; value: -18 }
                         PauseAnimation { duration: 35 }
-                        PropertyAction { target: pwField; property: "shakeX"; value: 12 }
+                        PropertyAction { target: pwPill; property: "shakeX"; value: 12 }
                         PauseAnimation { duration: 30 }
-                        PropertyAction { target: pwField; property: "shakeX"; value: -14 }
+                        PropertyAction { target: pwPill; property: "shakeX"; value: -14 }
                         PauseAnimation { duration: 30 }
-                        PropertyAction { target: pwField; property: "shakeX"; value: 8 }
+                        PropertyAction { target: pwPill; property: "shakeX"; value: 8 }
                         PauseAnimation { duration: 28 }
-                        PropertyAction { target: pwField; property: "shakeX"; value: -6 }
+                        PropertyAction { target: pwPill; property: "shakeX"; value: -6 }
                         PauseAnimation { duration: 25 }
-                        PropertyAction { target: pwField; property: "shakeX"; value: 0 }
+                        PropertyAction { target: pwPill; property: "shakeX"; value: 0 }
                     }
 
                     Connections {
@@ -601,55 +408,60 @@ Scope {
                         }
                     }
 
-                    background: Rectangle {
-                        radius: 10
-                        color: Qt.rgba(Theme.popupBg.r, Theme.popupBg.g, Theme.popupBg.b, 0.5)
-                        border.width: 2
-                        border.color: pwField.activeFocus ? Theme.accentActive : Theme.borderMuted
-                        Behavior on border.color { ColorAnimation { duration: 150 } }
-                    }
-
-                    text: root.currentText
-                    onTextChanged: if (root.currentText !== text) root.currentText = text
-
-                    focus: true
-                    onAccepted: pwRow.submit()
-                    Component.onCompleted: forceActiveFocus()
-                }
-
-                Rectangle {
-                    id: submitBtn
-                    implicitWidth: 28
-                    implicitHeight: 28
-                    radius: 14
-                    color: mouse.containsMouse ? Theme.hoverBgStrong : Qt.rgba(Theme.popupBg.r, Theme.popupBg.g, Theme.popupBg.b, 0.5)
-                    border.width: 1
-                    border.color: Theme.borderMuted
-                    Behavior on color { ColorAnimation { duration: 150 } }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "\u2192"
-                        color: Theme.foreground
-                        font.pixelSize: 15
-                        font.bold: true
-                    }
-
-                    MouseArea {
-                        id: mouse
+                    TextField {
+                        id: pwField
                         anchors.fill: parent
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: pwRow.submit()
+                        anchors.leftMargin: 20
+                        anchors.rightMargin: 44
+                        verticalAlignment: TextInput.AlignVCenter
+                        echoMode: TextInput.Password
+                        passwordCharacter: "\u2022"
+                        horizontalAlignment: TextInput.AlignLeft
+                        placeholderText: "Password"
+
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 16
+                        color: Theme.foreground
+                        placeholderTextColor: Qt.rgba(1, 1, 1, 0.5)
+
+                        background: Item {}
+
+                        text: root.currentText
+                        onTextChanged: if (root.currentText !== text) root.currentText = text
+
+                        focus: true
+                        onAccepted: pwRow.submit()
+                        Component.onCompleted: forceActiveFocus()
+                    }
+
+                    Rectangle {
+                        id: submitBtn
+                        anchors.right: parent.right
+                        anchors.rightMargin: 6
+                        anchors.verticalCenter: parent.verticalCenter
+                        implicitWidth: 34
+                        implicitHeight: 34
+                        radius: 17
+                        color: mouse.containsMouse ? Theme.hoverBgStrong : "transparent"
+                        Behavior on color { ColorAnimation { duration: 150 } }
+
+                        Text {
+                            anchors.centerIn: parent
+                            text: "\u2192"
+                            color: Theme.foreground
+                            font.pixelSize: 16
+                            font.bold: true
+                        }
+
+                        MouseArea {
+                            id: mouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: pwRow.submit()
+                        }
                     }
                 }
-            }
-
-            BatteryStatus {
-                anchors.bottom: parent.bottom
-                anchors.right: parent.right
-                anchors.bottomMargin: 24
-                anchors.rightMargin: 24
             }
 
             onVisibleChanged: {
@@ -659,10 +471,7 @@ Scope {
 
                     pwShake.stop()
                     pwShake.start()
-                    settingsBtn.triggerShake()
                     root.startAutoSuspendIfNeeded()
-                } else {
-                    settingsBtn.triggerShake()
                 }
             }
         }
