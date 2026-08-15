@@ -1,0 +1,15 @@
+# shortcuts data (personal)
+.config/eww/shortcuts.json
+
+# gtk bookmarks (personal paths)
+.config/gtk-3.0/bookmarks
+.config/gtk-3.0/settings.ini.lock
+
+# pywal cache (generated at runtime)
+.cache/
+
+# Quickshell runtime/state (personal: shortcuts, commands, wifi/bt history, caches)
+.config/quickshell/state/
+.config/quickshell/icons/.app_cache.tsv
+.config/quickshell/icons/.*.lock
+.config/quickshell/Background/wallpaper-debug.md
