@@ -39,31 +39,11 @@ def get_holiday_map():
         pass
     return hm
 
-# ── khal — single subprocess call, parse all events at once ───────────────
+# ── events — no calendar backend wired up; always empty ───────────────────
+# (previously shelled out to `khal`, which read a vdirsyncer-synced Google
+# Calendar — removed, this is now a plain date grid with holidays only)
 def get_event_map():
-    em = {}
-    try:
-        end_year  = today.year + (2 if today.month > 6 else 1)
-        end_month = (today.month + 17) % 12 or 12
-        end_day   = calendar.monthrange(end_year, end_month)[1]
-        r = subprocess.run(
-            ['khal', 'list', '--format', '{start-date}|{title}',
-             today.strftime('%d/%m/%Y'),
-             date(end_year, end_month, end_day).strftime('%d/%m/%Y')],
-            capture_output=True, text=True, timeout=5
-        )
-        for line in r.stdout.splitlines():
-            if '|' not in line:
-                continue
-            ds, _, title = line.strip().partition('|')
-            try:
-                d = datetime.strptime(ds.strip(), '%d/%m/%Y').date()
-                em.setdefault((d.year, d.month, d.day), []).append(title.strip())
-            except ValueError:
-                pass
-    except Exception:
-        pass
-    return em
+    return {}
 
 # ── month builder ──────────────────────────────────────────────────────────
 FILLER = {"date":0,"weekday":0,"today":False,"has_event":False,
@@ -128,21 +108,17 @@ def load_cache():
         pass
     return None
 
-# ── sync helper — runs vdirsyncer in background, then refreshes cache ──────
+# ── rebuild helper — no sync backend wired up, just rebuilds the cache ────
 def trigger_sync_and_rebuild():
     """
-    Kick off vdirsyncer asynchronously. When it finishes, rebuild the cache
-    and touch TRIGGER_FILE. QuickShell has a FileView watching that path with
-    watchChanges: true, so it picks this up and reloads the current month —
-    no polling, no inotifywait subprocess.
+    Rebuild the cache and touch TRIGGER_FILE. QuickShell has a FileView
+    watching that path with watchChanges: true, so it picks this up and
+    reloads the current month. (Previously ran `vdirsyncer sync` first —
+    removed along with the khal/vdirsyncer backend.)
     """
     import threading
 
     def _worker():
-        try:
-            subprocess.run(['vdirsyncer', 'sync'], timeout=60, capture_output=True)
-        except Exception:
-            pass
         build_cache()
         try:
             os.makedirs(os.path.dirname(TRIGGER_FILE), exist_ok=True)
@@ -174,10 +150,6 @@ cache = load_cache()
 
 if cache is None or is_refresh:
     if is_refresh:
-        try:
-            subprocess.run(['vdirsyncer', 'sync'], timeout=30, capture_output=True)
-        except Exception:
-            pass
         cache = build_cache()
     else:
         cache = build_cache()

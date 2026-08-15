@@ -34,8 +34,6 @@ wayvnc"*).
 3. [Hyprland companion tools](#3-hyprland-companion-tools)
 4. [Quickshell](#4-quickshell)
 5. [Rofi](#5-rofi)
-6. [khal](#6-khal)
-7. [vdirsyncer](#7-vdirsyncer)
 8. [pywal](#8-pywal)
 9. [KDE/Qt integration layer](#9-kdeqt-integration-layer)
 10. [Audio & media](#10-audio--media)
@@ -117,16 +115,6 @@ You can toggle VNC server with `Alt+V` and connect with phone accordingly, altho
 - Icon theme **Papirus** (rofi's `icon-theme:`), with
   hicolor/Adwaita/Breeze/oxygen as scan fallbacks in `shortcuts-add.sh`.
 - Font **Satoshi Variable** — not a repo font, install manually.
-
-## 6. khal
-CLI calendar. Invoked as `khal list --format '{start-date}|{title}' ...`
-from `calendar.sh`. Reads from a local vdir that vdirsyncer keeps
-populated.
-
-## 7. vdirsyncer
-`vdirsyncer sync`, invoked from the same script (on a timer, and
-synchronously on force-refresh). Local storage has two collections
-configured: a Google Calendar one and a holidays one.
 
 ## 8. pywal
 - The `wal` binary — installed to `~/.local/bin/wal` via pip, **not** a
@@ -283,7 +271,7 @@ installed, but worth reconciling:
 **Everything else — standard dnf install:**
 ```bash
 sudo dnf install hyprlock xdg-desktop-portal-hyprland xdg-desktop-portal \
-  rofi khal vdirsyncer \
+  rofi \
   konsole dolphin kdeconnect \
   wireplumber pulseaudio-utils playerctl mpv \
   NetworkManager bluez rfkill \
@@ -297,7 +285,7 @@ sudo dnf install hyprlock xdg-desktop-portal-hyprland xdg-desktop-portal \
   papirus-icon-theme breeze-icon-theme breeze-cursor-theme breeze-gtk
 ```
 
-A few of these (`wayvnc`, `cliphist`, `khal`, `vdirsyncer`, `kdeconnect`,
+A few of these (`wayvnc`, `cliphist`, `kdeconnect`,
 the icon themes) only landed in Fedora's official repos in the last
 couple of years — if `dnf install` can't find one on an older release,
 that package is the first place to check for a COPR.

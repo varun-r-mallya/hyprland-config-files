@@ -51,7 +51,7 @@ PACMAN_PACKAGES=(
     imagemagick librsvg inkscape
     tuned at wayvnc
     jq openssl brightnessctl socat gcc
-    python-pywal khal vdirsyncer
+    python-pywal
     papirus-icon-theme breeze-icons breeze-gtk
     git-lfs
 )
@@ -81,7 +81,7 @@ git lfs pull
 BACKUP_DIR="$HOME/.config-backup-pre-dotfiles-$(date +%Y%m%d-%H%M%S)"
 mkdir -p "$BACKUP_DIR"
 
-for d in hypr quickshell rofi gtk-3.0 gtk-4.0 khal wal icons sounds fontconfig; do
+for d in hypr quickshell rofi gtk-3.0 gtk-4.0 wal icons sounds fontconfig; do
     if [ -e "$HOME/.config/$d" ]; then
         cp -a "$HOME/.config/$d" "$BACKUP_DIR/" 2>/dev/null || true
     fi
