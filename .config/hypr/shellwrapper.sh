@@ -54,9 +54,4 @@ qs -d &
     sed -i 's/rgb(\([^)]*\))/rgb(\L\1)/g' ~/.cache/wal/hyprland-colours.lua
 ) &
 
-(
-    killall dolphin 2>/dev/null
-    dolphin &
-) &
-
 wl-paste --watch cliphist --max-items 10 store &
