@@ -45,7 +45,7 @@ PACMAN_PACKAGES=(
     hyprland quickshell hyprshot xdg-desktop-portal-hyprland xdg-desktop-portal
     hyprpolkitagent
     rofi ghostty dolphin konsole kdeconnect
-    wireplumber pipewire-pulse playerctl mpv
+    wireplumber pipewire-pulse playerctl mpv mpv-mpris
     networkmanager bluez bluez-utils rfkill
     grim wl-clipboard cliphist
     imagemagick librsvg inkscape
@@ -81,7 +81,7 @@ git lfs pull
 BACKUP_DIR="$HOME/.config-backup-pre-dotfiles-$(date +%Y%m%d-%H%M%S)"
 mkdir -p "$BACKUP_DIR"
 
-for d in hypr quickshell rofi gtk-3.0 gtk-4.0 wal icons sounds fontconfig; do
+for d in hypr quickshell rofi gtk-3.0 gtk-4.0 wal icons sounds fontconfig mpv; do
     if [ -e "$HOME/.config/$d" ]; then
         cp -a "$HOME/.config/$d" "$BACKUP_DIR/" 2>/dev/null || true
     fi
@@ -138,6 +138,16 @@ else
     warn "No wallpaper found to generate an initial theme from — run wal manually later."
 fi
 
+# ---------------------------------------------------------------------------
+# 9. video group — needed for brightnessctl to write the backlight file
+#    without prompting for a password on every keypress
+# ---------------------------------------------------------------------------
+if ! id -nG "$USER" | grep -qw video; then
+    log "Adding $USER to the video group (needed for brightness control)..."
+    sudo usermod -aG video "$USER"
+    warn "Group change only applies after you log out and back in."
+fi
+
 log "Done."
 cat <<'EOF'
 
@@ -151,6 +161,7 @@ Next steps:
      or edit XCURSOR_THEME in ~/.config/hypr/hyprland.lua to a theme you have.
   4. SUPER+SHIFT+W to pick a wallpaper from ~/Pictures/Wallpapers whenever
      you want to change the theme.
+  5. Drop your own music into ~/Music — SUPER+T toggles autoplay.
 
 See ~/.config/hypr/HYPRLAND_README.md and README.md for full details.
 EOF
