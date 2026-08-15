@@ -110,10 +110,6 @@ hl.layer_rule({
     animation = "false",
 })
 hl.layer_rule({
-    match = { namespace = "quickshell:videowallpaper" },
-    animation = "false",
-})
-hl.layer_rule({
     match = { namespace = "quickshell:popup:battery" },
     blur = true,
     ignore_alpha = 0.1,
@@ -524,7 +520,6 @@ hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2
 
         -- Wallpaper
         hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("~/.config/hypr/wallpaper_switcher.sh"))
-        hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd("~/.config/hypr/video-wallpaper-selector.sh"))
         -- Player controls
         hl.bind("ALT + N", hl.dsp.exec_cmd(
             'playerctl --ignore-player=kdeconnect next'
