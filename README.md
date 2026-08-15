@@ -1,4 +1,25 @@
-# hyprquickshellsx — Dependency Reference
+# hyprland-config-files — Dependency Reference
+
+## Quick start (Arch Linux)
+
+```bash
+git clone git@github.com:varun-r-mallya/hyprland-config-files.git
+cd hyprland-config-files
+./setup.sh
+```
+
+`setup.sh` installs everything available in Arch's official repos,
+pulls the real wallpaper/font files out of Git LFS, deploys `.config/`
+into `$HOME` (backing up anything already there), installs fonts and
+wallpapers, compiles the volume-osd helper, and generates an initial
+pywal theme. See the script itself for exactly what it does and doesn't
+do (a couple of one-time steps need your sudo password interactively,
+so they're left for you to run manually — the script tells you which).
+
+On another distro, use the dependency list below to install the
+equivalent packages by hand.
+
+---
 
 Everything the shell's own code actually calls — pulled directly out of
 `hyprland.lua`, the `.sh`/`.py` scripts, and the Quickshell QML by reading
