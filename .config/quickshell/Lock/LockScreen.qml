@@ -468,9 +468,6 @@ Scope {
                 if (visible) {
                     pwRow.reset()
                     pwField.forceActiveFocus()
-
-                    pwShake.stop()
-                    pwShake.start()
                     root.startAutoSuspendIfNeeded()
                 }
             }
